@@ -4,13 +4,20 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    // World border
+    public float sideBorder = 10f;
+    public float verticalBorder = 5f;
+
+    // Player
     public Rigidbody playerRb;
-    public bool shooting = false;
+    [SerializeField] float playerSpeed = 7.7f;
 
-    [SerializeField] float playerSpeed = 200f;
-
+    // Shooting
+    [SerializeField] private bool shooting = true;
+    [SerializeField] float playerShootSpeed = 0.2f;
     public GameObject playerBullet;
     public List <GameObject> playerBulletsArray;
+
     
 
 
@@ -18,13 +25,14 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         playerRb = GetComponent<Rigidbody>();
+        StartCoroutine(StartShuting());
     }
 
     // Update is called once per frame
     void Update()
     {
         PlayerMove();
-        StartShuting();
+        
         BulletsBehavior();
     }
 
@@ -33,33 +41,31 @@ public class PlayerController : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.A) && transform.position.x > -sideBorder)
         {
-            transform.Translate(Vector3.left * 5f * Time.deltaTime);
+            transform.Translate(Vector3.left * playerSpeed * Time.deltaTime);
         }         
-        if (Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.D) && transform.position.x < sideBorder)
         {
-            transform.Translate(Vector3.right * 5f * Time.deltaTime);
+            transform.Translate(Vector3.right * playerSpeed * Time.deltaTime);
         } 
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.W) && transform.position.z < verticalBorder)
         {
-            transform.Translate(Vector3.forward * 5f * Time.deltaTime);
+            transform.Translate(Vector3.forward * playerSpeed * Time.deltaTime);
         }        
-        if (Input.GetKey(KeyCode.S))
+        if (Input.GetKey(KeyCode.S) && transform.position.z > -verticalBorder)
         {
-            transform.Translate(Vector3.back * 5f * Time.deltaTime);
+            transform.Translate(Vector3.back * playerSpeed * Time.deltaTime);
         }
     }
 
-    public void StartShuting()
+    public IEnumerator StartShuting()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        while (shooting)
         {
-            shooting = true;
-            InvokeRepeating("BulletOut", 0, 1);
-        } else
-        {
-            CancelInvoke("BulletOut");
+            yield return new WaitForSeconds(playerShootSpeed);
+            Debug.Log("hueta");
+            BulletOut();
         }
     }
 
