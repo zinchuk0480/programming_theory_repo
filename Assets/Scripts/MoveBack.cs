@@ -14,9 +14,9 @@ public class MoveBack : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (transform.position.z > -400f)
+        if (transform.position.y > -200f)
         {
-            transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+            transform.Translate(Vector3.down * moveSpeed * Time.deltaTime);
         }
     }
 }

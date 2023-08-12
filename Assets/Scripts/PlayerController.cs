@@ -49,13 +49,13 @@ public class PlayerController : MonoBehaviour
         {
             transform.Translate(Vector3.right * playerSpeed * Time.deltaTime);
         } 
-        if (Input.GetKey(KeyCode.W) && transform.position.z < verticalBorder)
+        if (Input.GetKey(KeyCode.W) && transform.position.y < verticalBorder)
         {
-            transform.Translate(Vector3.forward * playerSpeed * Time.deltaTime);
+            transform.Translate(Vector3.up * playerSpeed * Time.deltaTime);
         }        
-        if (Input.GetKey(KeyCode.S) && transform.position.z > -verticalBorder)
+        if (Input.GetKey(KeyCode.S) && transform.position.y > -verticalBorder)
         {
-            transform.Translate(Vector3.back * playerSpeed * Time.deltaTime);
+            transform.Translate(Vector3.down * playerSpeed * Time.deltaTime);
         }
     }
 
@@ -64,14 +64,13 @@ public class PlayerController : MonoBehaviour
         while (shooting)
         {
             yield return new WaitForSeconds(playerShootSpeed);
-            Debug.Log("hueta");
             BulletOut();
         }
     }
 
     public void BulletOut()
     {
-        Instantiate(playerBullet, transform.position, Quaternion.Euler(new Vector3(90, 0, 0)));
+        Instantiate(playerBullet, transform.position, transform.rotation);
         playerBulletsArray.Add(playerBullet);
     }
 

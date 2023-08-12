@@ -17,7 +17,7 @@ public class BulletBehavior : MonoBehaviour
     void Update()
     {
         transform.Translate(Vector3.up * playerBulletSpeed * Time.deltaTime);
-        if (transform.position.z > 100)
+        if (transform.position.y > 100)
         {
             Destroy(gameObject);
         }
