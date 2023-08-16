@@ -4,19 +4,35 @@ using UnityEngine;
 
 public class MoveBack : MonoBehaviour
 {
-    float moveSpeed = 7f;
+    float moveSpeed = 2f;
+    public GameManager gameManager;
+
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        if (transform.position.y > -200f)
+        levelMove();
+
+    }
+
+    public void levelMove()
+    {
+        if (gameManager.gameIsPlay)
         {
-            transform.Translate(Vector3.down * moveSpeed * Time.deltaTime);
+            if (transform.position.y > gameManager.levelStopPlace)
+            {
+                transform.Translate(Vector3.down * moveSpeed * Time.deltaTime);
+            }
+            else
+            {
+                gameManager.gameIsPlay = false;
+            }
         }
     }
 }

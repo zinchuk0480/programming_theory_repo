@@ -5,14 +5,16 @@ TagManager:
   serializedVersion: 2
   tags:
   - PlayerBullet
+  - WeaponSpeed
+  - Enemy
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - sky
   - Water
   - UI
-  - 
+  - Enemys
   - 
   - 
   - 
@@ -41,4 +43,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: sky
+    uniqueID: 3791445547
     locked: 0

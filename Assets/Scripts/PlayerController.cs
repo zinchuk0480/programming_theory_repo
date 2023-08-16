@@ -10,14 +10,13 @@ public class PlayerController : MonoBehaviour
 
     // Player
     public Rigidbody playerRb;
-    [SerializeField] float playerSpeed = 7.7f;
+    public float playerSpeed = 7.7f;
+    public bool untouchable = false;
 
     // Shooting
     [SerializeField] private bool shooting = true;
-    [SerializeField] float playerShootSpeed = 0.2f;
     public GameObject playerBullet;
-    public List <GameObject> playerBulletsArray;
-
+    [SerializeField] float playerShootDelay = 1f;
     
 
 
@@ -26,6 +25,8 @@ public class PlayerController : MonoBehaviour
     {
         playerRb = GetComponent<Rigidbody>();
         StartCoroutine(StartShuting());
+
+        
     }
 
     // Update is called once per frame
@@ -63,7 +64,7 @@ public class PlayerController : MonoBehaviour
     {
         while (shooting)
         {
-            yield return new WaitForSeconds(playerShootSpeed);
+            yield return new WaitForSeconds(playerShootDelay);
             BulletOut();
         }
     }
@@ -71,11 +72,20 @@ public class PlayerController : MonoBehaviour
     public void BulletOut()
     {
         Instantiate(playerBullet, transform.position, transform.rotation);
-        playerBulletsArray.Add(playerBullet);
     }
 
     public void BulletsBehavior()
     {
 
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("WeaponSpeed"))
+        {
+            playerShootDelay -= 0.3f;
+            Destroy(other.gameObject);
+        }
+    }
+
 }
