@@ -2,27 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletBehavior : MonoBehaviour
+public class EnemyBulletBehavior : MonoBehaviour
 {
-    private float playerBulletSpeed = 10f;
+    private float enemyBulletSpeed = 0.5f;
 
 
     public float bulletDamage = 25;
     private float endDisplay = 10f;
 
     private GameObject bulletSmashParticle;
+    private GameObject player;
+    private Vector3 bulletDirection;
 
-    
-    // Ray
-    public LayerMask layerMask;
-    public Ray ray;
-    RaycastHit bulletHit;
 
     // Start is called before the first frame update
     void Start()
     {
         //bulletSmashParticle = GetComponent<ParticleSystem>();
+        player = GameObject.Find("Player");
         bulletSmashParticle = GameObject.Find("BulletSmashParticle");
+        bulletDirection = player.gameObject.transform.position - transform.position;
     }
 
     // Update is called once per frame
@@ -33,33 +32,24 @@ public class BulletBehavior : MonoBehaviour
 
     void BulletMove()
     {
-        transform.Translate(Vector3.up * playerBulletSpeed * Time.deltaTime);
-        if (transform.position.y > endDisplay)
+        
+        transform.Translate(bulletDirection * enemyBulletSpeed * Time.deltaTime);
+        if (transform.position.y > endDisplay || transform.position.y < -endDisplay)
         {
             Destroy(gameObject);
         }
     }
 
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    if (collision.gameObject.CompareTag("Enemy"))
-    //    {
-    //        bulletSmashParticle.gameObject.transform.position = transform.position;
-    //        bulletSmashParticle.gameObject.GetComponent<ParticleSystem>().Play();
-    //        Destroy(gameObject);
-
-    //        collision.gameObject.GetComponent<Enemy>().Damage(bulletDamage);
-    //    }
-    //}
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Enemy"))
+        Debug.Log("Crash");
+        if (other.gameObject.CompareTag("Player"))
         {
             bulletSmashParticle.gameObject.transform.position = transform.position;
             bulletSmashParticle.gameObject.GetComponent<ParticleSystem>().Play();
             Destroy(gameObject);
 
-            other.gameObject.GetComponent<Enemy>().Damage(bulletDamage);
+            other.gameObject.GetComponent<PlayerController>().Damage(bulletDamage);
         }
     }
 }
