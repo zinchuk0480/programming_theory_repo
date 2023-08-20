@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
+// abstraction
+// Inheritance 
 public abstract class Enemy : MonoBehaviour
 {
 
@@ -25,30 +28,6 @@ public abstract class Enemy : MonoBehaviour
     private float fireRangeArea = 8f;
 
     public GameObject explosionParticle;
-
-
-    void Start()
-    {
-        //Material material = Renderer.material;
-        //startColor = material.color;
-        //explosionParticle = GameObject.Find("ExplosionParticle");
-
-        //StartCoroutine(StartShuting());
-    }
-
-    void Update()
-    {
-        //VisualContact();
-    }
-
-    public virtual void Damage(float damagePower, GameObject weaponSpeedBonus, GameObject ground)
-    {
-        enemyHP -= damagePower;
-        Material material = Renderer.material;
-        material.color = enemyDamageBlink;
-        Invoke("ResetMaterial", 0.1f);
-        Explosion(weaponSpeedBonus, ground);
-    }
 
     public virtual void Damage(float damagePower)
     {
@@ -89,23 +68,7 @@ public abstract class Enemy : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public virtual void Explosion(GameObject weaponSpeedBonus, GameObject ground)
-    {
-        if (enemyHP <= 0)
-        {
-            Vector3 lastPos = transform.position;
 
-            explosionParticle.gameObject.transform.position = lastPos;
-            weaponSpeedBonus.gameObject.transform.position = transform.position;
-
-            Debug.Log(transform.position);
-            explosionParticle.gameObject.GetComponent<ParticleSystem>().Play();
-            Destroy(gameObject);
-            GameObject instantiatedPrefab = Instantiate(weaponSpeedBonus, lastPos, transform.rotation);
-
-            instantiatedPrefab.transform.SetParent(ground.transform);
-        }
-    }
 
     public void VisualContact()
     {
@@ -114,4 +77,5 @@ public abstract class Enemy : MonoBehaviour
             openFire = true;
         }
     }
+
 }

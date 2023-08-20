@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public float sideBorder = 18f;
+    public float verticalBorder = 10f;
 
     public bool gameIsPlay = false;
     public float levelStopPlace = -200f;
@@ -29,7 +31,7 @@ public class GameManager : MonoBehaviour
     private void EndLevel()
     {
         gameIsPlay = false;
-        player.transform.Translate(Vector3.up * playerController.playerSpeed * Time.deltaTime);
+        player.transform.Translate(Vector3.forward * playerController.playerSpeed * Time.deltaTime);
         playerController.untouchable = true;
     }
 }

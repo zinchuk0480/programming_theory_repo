@@ -25,4 +25,5 @@ public class EnemyOne : Enemy
             ceaseFire = false;
         }
     }
+
 }

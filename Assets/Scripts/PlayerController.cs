@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    GameManager gameManager;
     // World border
-    private float sideBorder = 18f;
-    private float verticalBorder = 10f;
+    public float sideBorder;
+    public float verticalBorder;
 
     // Player
     public float playerSpeed = 7.7f;
@@ -20,7 +21,12 @@ public class PlayerController : MonoBehaviour
     // Shooting
     [SerializeField] private bool shooting = true;
     public GameObject playerBullet;
-    [SerializeField] private float m_playerShootDelay = 0.7f;
+
+    private float minimumShootDelay = 0.1f;
+    private float stepShootDelay = 0.1f;
+
+    // incapsulation
+    private float m_playerShootDelay = 0.9f;
     public float playerShootDelay
     {
         get
@@ -29,13 +35,13 @@ public class PlayerController : MonoBehaviour
         }
         set
         {
-            if (value > 0.1f)
+            if (value > minimumShootDelay)
             {
                 m_playerShootDelay = value;
             }
             else
             {
-                m_playerShootDelay = 0.05f;
+                m_playerShootDelay = minimumShootDelay;
             }
         }
     }
@@ -44,10 +50,14 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         StartCoroutine(StartShuting());
 
         Material material = Renderer.material;
         startColor = material.color;
+
+        verticalBorder = gameManager.verticalBorder;
+        sideBorder = gameManager.sideBorder;
     }
 
     // Update is called once per frame
@@ -117,7 +127,7 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("WeaponSpeed"))
         {
-            playerShootDelay -= 0.1f;
+            playerShootDelay -= stepShootDelay;
             Destroy(other.gameObject);
         }
     }

@@ -10,14 +10,13 @@ public class BulletBehavior : MonoBehaviour
     private float endDisplay = 10f;
 
     private GameObject bulletSmashParticle;
-    private GameObject ground;
+
 
     // Start is called before the first frame update
     void Start()
     {
         //bulletSmashParticle = GetComponent<ParticleSystem>();
         bulletSmashParticle = GameObject.Find("BulletSmashParticle");
-        ground = GameObject.Find("Ground");
     }
 
     // Update is called once per frame
@@ -45,7 +44,7 @@ public class BulletBehavior : MonoBehaviour
 
             if (other.gameObject.GetComponent<EnemyTwo>())
             {
-                other.gameObject.GetComponent<Enemy>().Damage(bulletDamage, other.gameObject.GetComponent<EnemyTwo>().weaponSpeedBonus, ground);
+                other.gameObject.GetComponent<Enemy>().Damage(bulletDamage);
             }
             else
             {
