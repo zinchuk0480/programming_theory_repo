@@ -1,42 +1,56 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public abstract class Enemy : MonoBehaviour
 {
+
     public float enemyHP = 100;
 
     public MeshRenderer Renderer;
     public Color startColor;
     public Color enemyDamageBlink = new Color(1f, 1f, 1f, 0.5f);
 
-    private float enemyShootDelay = 2f;
+    protected float enemyShootDelay;
+
+    //initialize value (constructor)
+    public Enemy(float initialEnemyShootDelay)
+    {
+        enemyShootDelay = initialEnemyShootDelay;
+    }
     public GameObject enemyBulet;
+    public bool openFire = false;
+    public bool ceaseFire = true;
+    private float fireRangeArea = 8f;
 
-    private GameObject explosionParticle;
-    private bool shooting = true;
+    public GameObject explosionParticle;
 
 
-
-    // Start is called before the first frame update
     void Start()
     {
+        //Material material = Renderer.material;
+        //startColor = material.color;
+        //explosionParticle = GameObject.Find("ExplosionParticle");
 
-
-        Material material = Renderer.material;
-        startColor = material.color;
-        explosionParticle = GameObject.Find("ExplosionParticle");
-
-        StartCoroutine(StartShuting());
+        //StartCoroutine(StartShuting());
     }
 
-    // Update is called once per frame
     void Update()
     {
-
+        //VisualContact();
     }
 
-    public void Damage(float damagePower)
+    public virtual void Damage(float damagePower, GameObject weaponSpeedBonus, GameObject ground)
+    {
+        enemyHP -= damagePower;
+        Material material = Renderer.material;
+        material.color = enemyDamageBlink;
+        Invoke("ResetMaterial", 0.1f);
+        Explosion(weaponSpeedBonus, ground);
+    }
+
+    public virtual void Damage(float damagePower)
     {
         enemyHP -= damagePower;
         Material material = Renderer.material;
@@ -53,7 +67,7 @@ public class Enemy : MonoBehaviour
 
     public IEnumerator StartShuting()
     {
-        while (shooting)
+        while (openFire)
         {
             yield return new WaitForSeconds(enemyShootDelay);
             BulletOut();
@@ -62,15 +76,10 @@ public class Enemy : MonoBehaviour
 
     public void BulletOut()
     {
-        Instantiate(enemyBulet, transform.position, transform.rotation);
+        Instantiate(enemyBulet, transform.position, Quaternion.Euler(new Vector3(90, 0, 0)));
     }
 
-
-
-
-
-
-    public void Explosion()
+    public virtual void Explosion()
     {
         if (enemyHP <= 0)
         {
@@ -78,6 +87,31 @@ public class Enemy : MonoBehaviour
             Debug.Log(transform.position);
             explosionParticle.gameObject.GetComponent<ParticleSystem>().Play();
             Destroy(gameObject);
+        }
+    }
+    public virtual void Explosion(GameObject weaponSpeedBonus, GameObject ground)
+    {
+        if (enemyHP <= 0)
+        {
+            Vector3 lastPos = transform.position;
+
+            explosionParticle.gameObject.transform.position = lastPos;
+            weaponSpeedBonus.gameObject.transform.position = transform.position;
+
+            Debug.Log(transform.position);
+            explosionParticle.gameObject.GetComponent<ParticleSystem>().Play();
+            Destroy(gameObject);
+            GameObject instantiatedPrefab = Instantiate(weaponSpeedBonus, lastPos, transform.rotation);
+
+            instantiatedPrefab.transform.SetParent(ground.transform);
+        }
+    }
+
+    public void VisualContact()
+    {
+        if (transform.position.y < fireRangeArea && transform.position.y > -fireRangeArea)
+        {
+            openFire = true;
         }
     }
 }

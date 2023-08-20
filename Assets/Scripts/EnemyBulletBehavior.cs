@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyBulletBehavior : MonoBehaviour
 {
-    private float enemyBulletSpeed = 0.5f;
+    private float enemyBulletSpeed = 10f;
 
 
     public float bulletDamage = 25;
@@ -32,8 +32,8 @@ public class EnemyBulletBehavior : MonoBehaviour
 
     void BulletMove()
     {
-        
-        transform.Translate(bulletDirection * enemyBulletSpeed * Time.deltaTime);
+        transform.position += bulletDirection.normalized * enemyBulletSpeed * Time.deltaTime;
+        //transform.Translate(bulletDirection * enemyBulletSpeed * Time.deltaTime);
         if (transform.position.y > endDisplay || transform.position.y < -endDisplay)
         {
             Destroy(gameObject);
@@ -42,9 +42,9 @@ public class EnemyBulletBehavior : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Crash");
         if (other.gameObject.CompareTag("Player"))
         {
+            Debug.Log("Crash: " + other);
             bulletSmashParticle.gameObject.transform.position = transform.position;
             bulletSmashParticle.gameObject.GetComponent<ParticleSystem>().Play();
             Destroy(gameObject);

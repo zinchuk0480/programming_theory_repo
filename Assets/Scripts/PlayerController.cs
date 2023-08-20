@@ -5,13 +5,12 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     // World border
-    public float sideBorder = 10f;
-    public float verticalBorder = 5f;
+    private float sideBorder = 18f;
+    private float verticalBorder = 10f;
 
     // Player
-    public Rigidbody playerRb;
     public float playerSpeed = 7.7f;
-    private float playerHP = 100f;
+    public float playerHP = 100f;
     public bool untouchable = false;
 
     public MeshRenderer Renderer;
@@ -21,7 +20,7 @@ public class PlayerController : MonoBehaviour
     // Shooting
     [SerializeField] private bool shooting = true;
     public GameObject playerBullet;
-    private float m_playerShootDelay = 1f;
+    [SerializeField] private float m_playerShootDelay = 0.7f;
     public float playerShootDelay
     {
         get
@@ -30,9 +29,13 @@ public class PlayerController : MonoBehaviour
         }
         set
         {
-            if (value > 0.4f)
+            if (value > 0.1f)
             {
                 m_playerShootDelay = value;
+            }
+            else
+            {
+                m_playerShootDelay = 0.05f;
             }
         }
     }
@@ -41,7 +44,6 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerRb = GetComponent<Rigidbody>();
         StartCoroutine(StartShuting());
 
         Material material = Renderer.material;
@@ -103,14 +105,19 @@ public class PlayerController : MonoBehaviour
         playerHP -= damagePower;
         Material material = Renderer.material;
         material.color = playerDamageBlink;
-        Invoke("ResetMaterial", 0.1f);
+        Invoke("ResetMaterial", 0.3f);
+    }
+    public void ResetMaterial()
+    {
+        Material material = Renderer.material;
+        material.color = startColor;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("WeaponSpeed"))
         {
-            playerShootDelay -= 0.3f;
+            playerShootDelay -= 0.1f;
             Destroy(other.gameObject);
         }
     }
