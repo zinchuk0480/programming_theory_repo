@@ -13,10 +13,13 @@ public class PlayerController : MonoBehaviour
     public float playerSpeed = 7.7f;
     public float playerHP = 100f;
     public bool untouchable = false;
+    
+    public GameObject explosionParticle;
 
     public MeshRenderer Renderer;
     public Color startColor;
     public Color playerDamageBlink = new Color(1f, 1f, 1f, 0.5f);
+
 
     // Shooting
     [SerializeField] private bool shooting = true;
@@ -116,11 +119,25 @@ public class PlayerController : MonoBehaviour
         Material material = Renderer.material;
         material.color = playerDamageBlink;
         Invoke("ResetMaterial", 0.3f);
+
+        if (playerHP <= 0)
+        {
+            PlayerExplosion();
+        }
     }
     public void ResetMaterial()
     {
         Material material = Renderer.material;
         material.color = startColor;
+    }
+
+    public void PlayerExplosion()
+    {
+        explosionParticle.gameObject.transform.position = transform.position;
+        explosionParticle.gameObject.GetComponent<ParticleSystem>().Play();
+        Destroy(gameObject);
+        gameManager.GameOver();
+
     }
 
     private void OnTriggerEnter(Collider other)

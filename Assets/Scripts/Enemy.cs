@@ -9,7 +9,7 @@ using UnityEngine;
 public abstract class Enemy : MonoBehaviour
 {
 
-    public float enemyHP = 100;
+    public float enemyHP;
 
     public MeshRenderer Renderer;
     public Color startColor;
@@ -63,12 +63,16 @@ public abstract class Enemy : MonoBehaviour
         if (enemyHP <= 0)
         {
             explosionParticle.gameObject.transform.position = transform.position;
-            Debug.Log(transform.position);
             explosionParticle.gameObject.GetComponent<ParticleSystem>().Play();
-            Destroy(gameObject);
+            DestroyGameObject();
         }
     }
 
+    public void DestroyGameObject()
+    {
+        Debug.Log("Destroy all Enemys");
+        Destroy(gameObject);
+    }
 
     public void VisualContact()
     {

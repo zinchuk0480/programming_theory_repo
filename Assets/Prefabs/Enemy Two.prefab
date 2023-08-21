@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 6110477962072772335}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -58.49, z: -5.0033336}
-  m_LocalScale: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -127,3 +127,4 @@ MonoBehaviour:
   ceaseFire: 1
   explosionParticle: {fileID: 0}
   weaponSpeedBonus: {fileID: 7793423671925872767, guid: 248415490d1504043a1eaf8f278c1956, type: 3}
+  startPos: 0

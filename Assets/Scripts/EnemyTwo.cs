@@ -15,6 +15,7 @@ public class EnemyTwo : Enemy
     // Start is called before the first frame update
     void Start()
     {
+        enemyHP = 100;
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         Material material = Renderer.material;
         startColor = material.color;
@@ -70,7 +71,7 @@ public class EnemyTwo : Enemy
         if (MoveRight)
         {
             transform.Translate(Vector3.left * -0.5f * Time.deltaTime);
-            if (localPos >= startPos + 2 || localPos > gameManager.sideBorder)
+            if (localPos >= startPos + 2 || localPos > gameManager.GroundHorizontBorder)
             {
                 MoveRight = false;
                 Debug.Log(MoveRight);
@@ -79,10 +80,9 @@ public class EnemyTwo : Enemy
         if (!MoveRight)
         {
             transform.Translate(Vector3.left * 0.5f * Time.deltaTime);
-            if (localPos <= startPos - 2 || localPos < gameManager.sideBorder)
+            if (localPos <= startPos - 2 || localPos < -gameManager.GroundHorizontBorder)
             {
                 MoveRight = true;
-                Debug.Log(MoveRight);
             }
         }
     }

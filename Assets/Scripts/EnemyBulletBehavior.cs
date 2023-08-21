@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemyBulletBehavior : MonoBehaviour
 {
+    GameManager gameManager;
     private float enemyBulletSpeed = 10f;
 
 
@@ -19,9 +20,14 @@ public class EnemyBulletBehavior : MonoBehaviour
     void Start()
     {
         //bulletSmashParticle = GetComponent<ParticleSystem>();
-        player = GameObject.Find("Player");
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        player = GameObject.FindGameObjectWithTag("Player");
         bulletSmashParticle = GameObject.Find("BulletSmashParticle");
-        bulletDirection = player.gameObject.transform.position - transform.position;
+
+        if (gameManager.gameIsPlay)
+        {
+            bulletDirection = player.gameObject.transform.position - transform.position;
+        }
     }
 
     // Update is called once per frame
@@ -36,8 +42,13 @@ public class EnemyBulletBehavior : MonoBehaviour
         //transform.Translate(bulletDirection * enemyBulletSpeed * Time.deltaTime);
         if (transform.position.y > endDisplay || transform.position.y < -endDisplay)
         {
-            Destroy(gameObject);
+            DestroyBullet();
         }
+    }
+
+    public void DestroyBullet()
+    {
+        Destroy(gameObject);
     }
 
     private void OnTriggerEnter(Collider other)
