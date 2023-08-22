@@ -55,7 +55,6 @@ public class EnemyBulletBehavior : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Crash: " + other);
             bulletSmashParticle.gameObject.transform.position = transform.position;
             bulletSmashParticle.gameObject.GetComponent<ParticleSystem>().Play();
             Destroy(gameObject);

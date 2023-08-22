@@ -11,6 +11,7 @@ public class BulletBehavior : MonoBehaviour
 
     private GameObject bulletSmashParticle;
 
+    public AudioSource bulletAudio;
 
     // Start is called before the first frame update
     void Start()
@@ -36,8 +37,13 @@ public class BulletBehavior : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+
         if (other.gameObject.CompareTag("Enemy"))
         {
+            bulletAudio.transform.parent = null;
+            bulletAudio.PlayOneShot(bulletAudio.clip, 0.3f);
+
+
             bulletSmashParticle.gameObject.transform.position = transform.position;
             bulletSmashParticle.gameObject.GetComponent<ParticleSystem>().Play();
             Destroy(gameObject);
@@ -52,4 +58,5 @@ public class BulletBehavior : MonoBehaviour
             }
         }
     }
+
 }

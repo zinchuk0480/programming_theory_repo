@@ -28,6 +28,11 @@ public class PlayerController : MonoBehaviour
     private float minimumShootDelay = 0.1f;
     private float stepShootDelay = 0.1f;
 
+    // Audio
+    private AudioSource playerAudio;
+    public AudioClip playerShoot;
+
+
     // incapsulation
     private float m_playerShootDelay = 0.9f;
     public float playerShootDelay
@@ -61,6 +66,8 @@ public class PlayerController : MonoBehaviour
 
         verticalBorder = gameManager.verticalBorder;
         sideBorder = gameManager.sideBorder;
+
+        playerAudio = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -106,6 +113,7 @@ public class PlayerController : MonoBehaviour
     public void BulletOut()
     {
         Instantiate(playerBullet, transform.position, Quaternion.Euler(new Vector3(0, 0, 0)));
+        playerAudio.PlayOneShot(playerShoot, 0.5f);
     }
 
     public void BulletsBehavior()

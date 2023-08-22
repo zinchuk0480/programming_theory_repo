@@ -29,6 +29,14 @@ public abstract class Enemy : MonoBehaviour
 
     public GameObject explosionParticle;
 
+    // Audio
+    public AudioSource explosionSound;
+
+
+    private void Start()
+    {
+        
+    }
     public virtual void Damage(float damagePower)
     {
         enemyHP -= damagePower;
@@ -64,13 +72,14 @@ public abstract class Enemy : MonoBehaviour
         {
             explosionParticle.gameObject.transform.position = transform.position;
             explosionParticle.gameObject.GetComponent<ParticleSystem>().Play();
+            explosionSound.transform.parent = null;
+            explosionSound.Play();
             DestroyGameObject();
         }
     }
 
     public void DestroyGameObject()
     {
-        Debug.Log("Destroy all Enemys");
         Destroy(gameObject);
     }
 
