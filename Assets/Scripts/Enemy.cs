@@ -8,7 +8,8 @@ using UnityEngine;
 // Inheritance 
 public abstract class Enemy : MonoBehaviour
 {
-
+    public GameManager gameManager;
+    public GameObject player;
     public float enemyHP;
 
     public MeshRenderer Renderer;
@@ -28,9 +29,6 @@ public abstract class Enemy : MonoBehaviour
     private float fireRangeArea = 8f;
 
     public GameObject explosionParticle;
-
-    // Audio
-    public AudioSource explosionSound;
 
 
     private void Start()
@@ -70,10 +68,9 @@ public abstract class Enemy : MonoBehaviour
     {
         if (enemyHP <= 0)
         {
+            gameManager.enemyExplosionPlay();
             explosionParticle.gameObject.transform.position = transform.position;
             explosionParticle.gameObject.GetComponent<ParticleSystem>().Play();
-            explosionSound.transform.parent = null;
-            explosionSound.Play();
             DestroyGameObject();
         }
     }
@@ -85,9 +82,12 @@ public abstract class Enemy : MonoBehaviour
 
     public void VisualContact()
     {
-        if (transform.position.y < fireRangeArea && transform.position.y > -fireRangeArea)
+        if (player != null)
         {
-            openFire = true;
+            if (transform.position.y < fireRangeArea && transform.position.y > -fireRangeArea)
+            {
+                openFire = true;
+            }
         }
     }
 

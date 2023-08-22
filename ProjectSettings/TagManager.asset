@@ -8,6 +8,7 @@ TagManager:
   - WeaponSpeed
   - Enemy
   - EnemyBullet
+  - AudioPlayerBullet
   layers:
   - Default
   - TransparentFX

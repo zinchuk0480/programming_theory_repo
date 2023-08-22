@@ -32,6 +32,18 @@ public class GameManager : MonoBehaviour
     public Level1 level_1;
 
 
+    // Audio
+    private AudioSource gameManagerAudio;
+    public AudioClip playerBulletSmash;
+    public AudioClip enemyBulletSmash;
+    public AudioClip enemyExplosion;
+    public AudioClip weaponSpeedBonus;
+
+
+    // Side bar
+    public int score;
+
+
     private bool pause;
     public GameObject pauseScreen;
     public GameObject gameOverScreen;
@@ -47,6 +59,9 @@ public class GameManager : MonoBehaviour
         playerController = player.GetComponent<PlayerController>();
 
         level_1 = GameObject.Find("Level1").GetComponent<Level1>();
+
+        gameManagerAudio = GetComponent<AudioSource>();
+
 
         StartGame();
     }
@@ -131,7 +146,6 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < enemys.Length; i++)
         {
-            Debug.Log(enemys[i].transform.position);
             enemys[i].gameObject.GetComponent<Enemy>().DestroyGameObject();
         }
         for (int i = 0; i < bullets.Length; i++)
@@ -142,10 +156,43 @@ public class GameManager : MonoBehaviour
 
     public void SpawnLevelEnemys(float[,] array)
     {
-        for (int i = 0; i < array.Length; i++)
+        for (int i = 0; i < array.GetLength(0); i++)
         {
-            GameObject prefabInstantiate = Instantiate(enemyTypesArray[0], new Vector3(array[i, 0], array[i, 1], array[i, 2]), transform.rotation);
-            prefabInstantiate.transform.SetParent(enemys_folder.transform);
+            Debug.Log("i: " + i);
+            if (i % 3 == 0)
+            {
+                GameObject prefabInstantiate = Instantiate(enemyTypesArray[1], new Vector3(array[i, 0], array[i, 1], array[i, 2]), transform.rotation);
+                prefabInstantiate.transform.SetParent(enemys_folder.transform);
+            }
+            else
+            {
+                GameObject prefabInstantiate = Instantiate(enemyTypesArray[0], new Vector3(array[i, 0], array[i, 1], array[i, 2]), transform.rotation);
+                prefabInstantiate.transform.SetParent(enemys_folder.transform);
+            }
         }
+    }
+
+    // Audio functions
+    public void playerBulletSmashPlay()
+    {
+        gameManagerAudio.PlayOneShot(playerBulletSmash, 0.5f);
+    }
+    //public void playerExplosionPlay()
+    //{
+    //    gameManagerAudio.PlayOneShot(playerExplosion, 0.5f);
+    //}
+
+    public void enemyBulletSmashPlay()
+    {
+        gameManagerAudio.PlayOneShot(enemyBulletSmash, 0.5f);
+    }
+
+    public void enemyExplosionPlay()
+    {
+        gameManagerAudio.PlayOneShot(enemyExplosion, 0.5f);
+    }    
+    public void WeaponSpeedBonusPlay()
+    {
+        gameManagerAudio.PlayOneShot(weaponSpeedBonus, 0.2f);
     }
 }

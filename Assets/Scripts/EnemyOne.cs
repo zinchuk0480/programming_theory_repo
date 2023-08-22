@@ -6,9 +6,12 @@ public class EnemyOne : Enemy
 {
     //initialize value (constructor)
     public EnemyOne() : base(2f) { }
-    
+
     void Start()
     {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        player = GameObject.FindGameObjectWithTag("Player");
+
         enemyHP = 50;
         Material material = Renderer.material;
         startColor = material.color;

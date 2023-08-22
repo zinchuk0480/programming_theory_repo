@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class EnemyTwo : Enemy
 {
-    GameManager gameManager;
     //initialize value (constructor)
     public EnemyTwo() : base(1f) { }
     public GameObject weaponSpeedBonus;
@@ -15,8 +14,10 @@ public class EnemyTwo : Enemy
     // Start is called before the first frame update
     void Start()
     {
-        enemyHP = 100;
+        player = GameObject.FindGameObjectWithTag("Player");
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+
+        enemyHP = 100;
         Material material = Renderer.material;
         startColor = material.color;
         explosionParticle = GameObject.Find("ExplosionParticle");
@@ -47,8 +48,8 @@ public class EnemyTwo : Enemy
             explosionParticle.gameObject.transform.position = lastPos;
             weaponSpeedBonus.gameObject.transform.position = transform.position;
 
-            Debug.Log(transform.position);
             explosionParticle.gameObject.GetComponent<ParticleSystem>().Play();
+            gameManager.enemyExplosionPlay();
             Destroy(gameObject);
             GameObject instantiatedPrefab = Instantiate(weaponSpeedBonus, lastPos, transform.rotation);
 
@@ -74,7 +75,6 @@ public class EnemyTwo : Enemy
             if (localPos >= startPos + 2 || localPos > gameManager.GroundHorizontBorder)
             {
                 MoveRight = false;
-                Debug.Log(MoveRight);
             }
         }
         if (!MoveRight)

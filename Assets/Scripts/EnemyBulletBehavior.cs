@@ -57,7 +57,8 @@ public class EnemyBulletBehavior : MonoBehaviour
         {
             bulletSmashParticle.gameObject.transform.position = transform.position;
             bulletSmashParticle.gameObject.GetComponent<ParticleSystem>().Play();
-            Destroy(gameObject);
+            gameManager.enemyBulletSmashPlay();
+            DestroyBullet();
 
             other.gameObject.GetComponent<PlayerController>().Damage(bulletDamage);
         }

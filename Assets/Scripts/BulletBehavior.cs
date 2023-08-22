@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BulletBehavior : MonoBehaviour
 {
+    GameManager gameManager;
     private float playerBulletSpeed = 10f;
 
     public float bulletDamage = 25;
@@ -11,11 +12,10 @@ public class BulletBehavior : MonoBehaviour
 
     private GameObject bulletSmashParticle;
 
-    public AudioSource bulletAudio;
-
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         //bulletSmashParticle = GetComponent<ParticleSystem>();
         bulletSmashParticle = GameObject.Find("BulletSmashParticle");
     }
@@ -40,22 +40,13 @@ public class BulletBehavior : MonoBehaviour
 
         if (other.gameObject.CompareTag("Enemy"))
         {
-            bulletAudio.transform.parent = null;
-            bulletAudio.PlayOneShot(bulletAudio.clip, 0.3f);
-
+            gameManager.playerBulletSmashPlay();
 
             bulletSmashParticle.gameObject.transform.position = transform.position;
             bulletSmashParticle.gameObject.GetComponent<ParticleSystem>().Play();
             Destroy(gameObject);
 
-            if (other.gameObject.GetComponent<EnemyTwo>())
-            {
-                other.gameObject.GetComponent<Enemy>().Damage(bulletDamage);
-            }
-            else
-            {
-                other.gameObject.GetComponent<Enemy>().Damage(bulletDamage);
-            }
+            other.gameObject.GetComponent<Enemy>().Damage(bulletDamage);
         }
     }
 

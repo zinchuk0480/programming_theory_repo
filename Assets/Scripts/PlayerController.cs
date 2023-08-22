@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour
     public Color startColor;
     public Color playerDamageBlink = new Color(1f, 1f, 1f, 0.5f);
 
+    public ParticleSystem damageSmoke;
+
 
     // Shooting
     [SerializeField] private bool shooting = true;
@@ -113,7 +115,7 @@ public class PlayerController : MonoBehaviour
     public void BulletOut()
     {
         Instantiate(playerBullet, transform.position, Quaternion.Euler(new Vector3(0, 0, 0)));
-        playerAudio.PlayOneShot(playerShoot, 0.5f);
+        playerAudio.PlayOneShot(playerShoot, 0.1f);
     }
 
     public void BulletsBehavior()
@@ -128,6 +130,10 @@ public class PlayerController : MonoBehaviour
         material.color = playerDamageBlink;
         Invoke("ResetMaterial", 0.3f);
 
+        if (playerHP < 50)
+        {
+            damageSmoke.Play();
+        }
         if (playerHP <= 0)
         {
             PlayerExplosion();
@@ -153,6 +159,7 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("WeaponSpeed"))
         {
             playerShootDelay -= stepShootDelay;
+            gameManager.WeaponSpeedBonusPlay();
             Destroy(other.gameObject);
         }
     }
