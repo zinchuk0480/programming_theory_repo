@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.IO;
 using System;
-
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
     private GameObject[] bullets;
 
     // Level
-    public Level1 level_1;
+    private Level1 level_1;
 
 
     // Audio
@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
 
     // Side bar
     public int score;
-
+    public TextMeshProUGUI scoreText;
 
     private bool pause;
     public GameObject pauseScreen;
@@ -158,7 +158,6 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < array.GetLength(0); i++)
         {
-            Debug.Log("i: " + i);
             if (i % 3 == 0)
             {
                 GameObject prefabInstantiate = Instantiate(enemyTypesArray[1], new Vector3(array[i, 0], array[i, 1], array[i, 2]), transform.rotation);
@@ -193,6 +192,13 @@ public class GameManager : MonoBehaviour
     }    
     public void WeaponSpeedBonusPlay()
     {
-        gameManagerAudio.PlayOneShot(weaponSpeedBonus, 0.2f);
+        gameManagerAudio.PlayOneShot(weaponSpeedBonus, 0.05f);
+    }
+
+    // Side bar
+    public void ScoreUp()
+    {
+        score += 1;
+        scoreText.text = $"Score: {(score).ToString()}";
     }
 }

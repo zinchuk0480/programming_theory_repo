@@ -39,7 +39,6 @@ public class EnemyBulletBehavior : MonoBehaviour
     void BulletMove()
     {
         transform.position += bulletDirection.normalized * enemyBulletSpeed * Time.deltaTime;
-        //transform.Translate(bulletDirection * enemyBulletSpeed * Time.deltaTime);
         if (transform.position.y > endDisplay || transform.position.y < -endDisplay)
         {
             DestroyBullet();

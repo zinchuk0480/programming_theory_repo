@@ -15,6 +15,7 @@ public class EnemyOne : Enemy
         enemyHP = 50;
         Material material = Renderer.material;
         startColor = material.color;
+
         explosionParticle = GameObject.Find("ExplosionParticle");
     }
 

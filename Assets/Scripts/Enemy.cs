@@ -8,21 +8,22 @@ using UnityEngine;
 // Inheritance 
 public abstract class Enemy : MonoBehaviour
 {
+    //initialize value (constructor)
+    protected float enemyShootDelay;
+    public Enemy(float initialEnemyShootDelay)
+    {
+        enemyShootDelay = initialEnemyShootDelay;
+    }
+
     public GameManager gameManager;
     public GameObject player;
+    
     public float enemyHP;
 
     public MeshRenderer Renderer;
     public Color startColor;
     public Color enemyDamageBlink = new Color(1f, 1f, 1f, 0.5f);
 
-    protected float enemyShootDelay;
-
-    //initialize value (constructor)
-    public Enemy(float initialEnemyShootDelay)
-    {
-        enemyShootDelay = initialEnemyShootDelay;
-    }
     public GameObject enemyBulet;
     public bool openFire = false;
     public bool ceaseFire = true;
@@ -30,18 +31,17 @@ public abstract class Enemy : MonoBehaviour
 
     public GameObject explosionParticle;
 
-
-    private void Start()
-    {
-        
-    }
     public virtual void Damage(float damagePower)
     {
         enemyHP -= damagePower;
         Material material = Renderer.material;
         material.color = enemyDamageBlink;
         Invoke("ResetMaterial", 0.1f);
-        Explosion();
+        
+        if (enemyHP <= 0)
+        {
+            Explosion();
+        }
     }
 
     public void ResetMaterial()
@@ -66,29 +66,29 @@ public abstract class Enemy : MonoBehaviour
 
     public virtual void Explosion()
     {
-        if (enemyHP <= 0)
-        {
-            gameManager.enemyExplosionPlay();
-            explosionParticle.gameObject.transform.position = transform.position;
-            explosionParticle.gameObject.GetComponent<ParticleSystem>().Play();
-            DestroyGameObject();
-        }
+        gameManager.enemyExplosionPlay();
+        explosionParticle.gameObject.transform.position = transform.position;
+        explosionParticle.transform.parent = GameObject.Find("Ground").transform;
+        explosionParticle.gameObject.GetComponent<ParticleSystem>().Play();
+        DestroyGameObject();
     }
 
     public void DestroyGameObject()
     {
         Destroy(gameObject);
+        gameManager.ScoreUp();
     }
 
     public void VisualContact()
     {
-        if (player != null)
+        var enemyInDisplay = (transform.position.y < fireRangeArea && transform.position.y > -fireRangeArea);
+        if (player.gameObject != null && enemyInDisplay)
         {
-            if (transform.position.y < fireRangeArea && transform.position.y > -fireRangeArea)
-            {
-                openFire = true;
-            }
+            openFire = true;
+        }
+        else
+        {
+            openFire = false;
         }
     }
-
 }

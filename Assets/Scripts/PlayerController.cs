@@ -76,8 +76,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         PlayerMove();
-        
-        BulletsBehavior();
+        ToggleShooting();
     }
 
     public void PlayerMove()
@@ -111,17 +110,28 @@ public class PlayerController : MonoBehaviour
             BulletOut();
         }
     }
+    public void ToggleShooting()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            shooting = !shooting;
+            if (shooting)
+            {
+                StartCoroutine(StartShuting());
+            }
+            else
+            {
+                StopCoroutine(StartShuting());
+            }
+        }
+    }
 
     public void BulletOut()
     {
         Instantiate(playerBullet, transform.position, Quaternion.Euler(new Vector3(0, 0, 0)));
-        playerAudio.PlayOneShot(playerShoot, 0.1f);
+        playerAudio.PlayOneShot(playerShoot, 0.05f);
     }
 
-    public void BulletsBehavior()
-    {
-
-    }
 
     public void Damage(float damagePower)
     {

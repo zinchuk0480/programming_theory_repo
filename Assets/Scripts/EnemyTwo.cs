@@ -6,23 +6,25 @@ public class EnemyTwo : Enemy
 {
     //initialize value (constructor)
     public EnemyTwo() : base(1f) { }
+
     public GameObject weaponSpeedBonus;
-    GameObject ground;
+    private GameObject ground;
     public float startPos;
-    bool MoveRight = true;
+    private bool MoveRight = true;
 
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        player = GameObject.FindGameObjectWithTag("Player");
+        ground = GameObject.Find("Ground");
 
         enemyHP = 100;
+        startPos = transform.localPosition.x;
+
         Material material = Renderer.material;
         startColor = material.color;
         explosionParticle = GameObject.Find("ExplosionParticle");
-        ground = GameObject.Find("Ground");
-        startPos = transform.localPosition.x;
     }
 
     // Update is called once per frame
@@ -35,7 +37,6 @@ public class EnemyTwo : Enemy
             ceaseFire = false;
         }
         Move();
-        
     }
 
     // Polymorphism (override enemy class)
@@ -43,28 +44,18 @@ public class EnemyTwo : Enemy
     {
         if (enemyHP <= 0)
         {
-            Vector3 lastPos = transform.position;
-
-            explosionParticle.gameObject.transform.position = lastPos;
-            weaponSpeedBonus.gameObject.transform.position = transform.position;
-
+            explosionParticle.gameObject.transform.position = transform.position;
             explosionParticle.gameObject.GetComponent<ParticleSystem>().Play();
-            gameManager.enemyExplosionPlay();
-            Destroy(gameObject);
-            GameObject instantiatedPrefab = Instantiate(weaponSpeedBonus, lastPos, transform.rotation);
 
+            weaponSpeedBonus.gameObject.transform.position = transform.position;
+            GameObject instantiatedPrefab = Instantiate(weaponSpeedBonus, transform.position, transform.rotation);
             instantiatedPrefab.transform.SetParent(ground.transform);
+
+            gameManager.enemyExplosionPlay();
+            DestroyGameObject();
         }
     }
 
-    public override void Damage(float damagePower)
-    {
-        enemyHP -= damagePower;
-        Material material = Renderer.material;
-        material.color = enemyDamageBlink;
-        Invoke("ResetMaterial", 0.1f);
-        Explosion();
-    }
     public void Move()
     {
         float localPos = transform.localPosition.x;
