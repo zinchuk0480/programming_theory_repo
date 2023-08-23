@@ -31,7 +31,8 @@ public class MoveBack : MonoBehaviour
             }
             else
             {
-                gameManager.gameIsPlay = false;
+                //gameManager.gameIsPlay = false;
+                gameManager.endOfLevel = true;
             }
         }
     }

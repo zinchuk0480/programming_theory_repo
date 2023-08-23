@@ -13,8 +13,7 @@ public class GameManager : MonoBehaviour
 
     public float GroundHorizontBorder = 4f;
 
-    public bool gameIsPlay = false;
-    public float levelStopPlace = -200f;
+
 
     // Objects
     public GameObject player;
@@ -30,7 +29,9 @@ public class GameManager : MonoBehaviour
 
     // Level
     private Level1 level_1;
-
+    public bool gameIsPlay = false;
+    public bool endOfLevel = false;
+    public float levelStopPlace = -200f;
 
     // Audio
     private AudioSource gameManagerAudio;
@@ -56,7 +57,7 @@ public class GameManager : MonoBehaviour
         gameOverScreen = GameObject.Find("Game Over Screen");
 
         enemys_folder = GameObject.Find("Enemys");
-        playerController = player.GetComponent<PlayerController>();
+        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 
         level_1 = GameObject.Find("Level1").GetComponent<Level1>();
 
@@ -69,7 +70,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!gameIsPlay)
+        if (endOfLevel && player != null)
         {
             EndLevel();
         }
@@ -80,13 +81,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void EndLevel()
+    public void EndLevel()
     {
-        if (gameIsPlay)
-        {
-            player.transform.Translate(Vector3.forward * playerController.playerSpeed * Time.deltaTime);
-            playerController.untouchable = true;
-        }
+        Debug.Log(":::::::::::::::::::::::::::::");
+        playerController.PlayerEscapeFromLevel();
     }
 
     public void TogglePause()
@@ -125,6 +123,8 @@ public class GameManager : MonoBehaviour
         gameIsPlay = true;
         pauseScreen.gameObject.SetActive(false);
         gameOverScreen.gameObject.SetActive(false);
+        score = 0;
+        scoreText.text = "Score: 0";
         Time.timeScale = 1;
         SpawnLevelEnemys(level_1.enemys_location);
     }

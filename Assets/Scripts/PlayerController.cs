@@ -15,12 +15,12 @@ public class PlayerController : MonoBehaviour
     public bool untouchable = false;
     
     public GameObject explosionParticle;
+    public ParticleSystem damageSmoke;
 
     public MeshRenderer Renderer;
     public Color startColor;
     public Color playerDamageBlink = new Color(1f, 1f, 1f, 0.5f);
 
-    public ParticleSystem damageSmoke;
 
 
     // Shooting
@@ -162,6 +162,12 @@ public class PlayerController : MonoBehaviour
         Destroy(gameObject);
         gameManager.GameOver();
 
+    }
+
+    public void PlayerEscapeFromLevel()
+    {
+        transform.Translate(Vector3.forward * playerSpeed * Time.deltaTime);
+        untouchable = true;
     }
 
     private void OnTriggerEnter(Collider other)
