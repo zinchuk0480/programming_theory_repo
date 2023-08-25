@@ -4,8 +4,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 
-// abstraction
-// Inheritance 
+// ABSTRACTION
+// INHERITANCE
 public abstract class Enemy : MonoBehaviour
 {
     //initialize value (constructor)
@@ -76,13 +76,16 @@ public abstract class Enemy : MonoBehaviour
     public void DestroyGameObject()
     {
         Destroy(gameObject);
-        gameManager.ScoreUp();
+        if (gameManager.gameIsPlay)
+        {
+            gameManager.ScoreUp();
+        }
     }
 
     public void VisualContact()
     {
         var enemyInDisplay = (transform.position.y < fireRangeArea && transform.position.y > -fireRangeArea);
-        if (player.gameObject != null && enemyInDisplay)
+        if (GameObject.FindGameObjectWithTag("Player") && enemyInDisplay)
         {
             openFire = true;
         }
@@ -90,5 +93,10 @@ public abstract class Enemy : MonoBehaviour
         {
             openFire = false;
         }
+    }
+
+    public void SearchPlayer()
+    {
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 }

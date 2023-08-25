@@ -62,4 +62,9 @@ public class EnemyBulletBehavior : MonoBehaviour
             other.gameObject.GetComponent<PlayerController>().Damage(bulletDamage);
         }
     }
+
+    public void SearchPlayer()
+    {
+        player = GameObject.FindGameObjectWithTag("Player");
+    }
 }

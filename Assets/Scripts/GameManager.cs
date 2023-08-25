@@ -8,16 +8,15 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    public float sideBorder = 14f;
-    public float verticalBorder = 8f;
+    public float sideBorder = 10f;
+    public float verticalBorder = 6f;
 
     public float GroundHorizontBorder = 4f;
 
 
-
     // Objects
     public GameObject player;
-    PlayerController playerController;
+    //PlayerController playerController;
     public GameObject ground;
     public GameObject enemys_folder;
 
@@ -26,6 +25,7 @@ public class GameManager : MonoBehaviour
     // All Enemy and his bullet
     private GameObject[] enemys;
     private GameObject[] bullets;
+    private GameObject[] bonus;
 
     // Level
     private Level1 level_1;
@@ -42,12 +42,14 @@ public class GameManager : MonoBehaviour
 
 
     // Side bar
-    public int score;
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI bestScoreText;
 
     private bool pause;
     public GameObject pauseScreen;
     public GameObject gameOverScreen;
+
+    public TextMeshProUGUI gameOverScore;
 
     // Start is called before the first frame update
     void Start()
@@ -57,7 +59,7 @@ public class GameManager : MonoBehaviour
         gameOverScreen = GameObject.Find("Game Over Screen");
 
         enemys_folder = GameObject.Find("Enemys");
-        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        //playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 
         level_1 = GameObject.Find("Level1").GetComponent<Level1>();
 
@@ -83,8 +85,8 @@ public class GameManager : MonoBehaviour
 
     public void EndLevel()
     {
-        Debug.Log(":::::::::::::::::::::::::::::");
-        playerController.PlayerEscapeFromLevel();
+        Debug.Log("player: " + player != null);
+        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().PlayerEscapeFromLevel();
     }
 
     public void TogglePause()
@@ -115,24 +117,43 @@ public class GameManager : MonoBehaviour
     {
         gameIsPlay = false;
         gameOverScreen.gameObject.SetActive(true);
+
+        gameOverScore.text = $"{MainManager.Instance.playerName} / Score: {MainManager.Instance.score.ToString()}";
     }
+
 
     public void StartGame()
     {
         pause = false;
         gameIsPlay = true;
+        endOfLevel = false;
         pauseScreen.gameObject.SetActive(false);
         gameOverScreen.gameObject.SetActive(false);
-        score = 0;
+
+        MainManager.Instance.score = 0;
         scoreText.text = "Score: 0";
+        bestScoreText.text = $"Best score: {MainManager.Instance.bestScore.ToString()}";
+
         Time.timeScale = 1;
         SpawnLevelEnemys(level_1.enemys_location);
     }
 
     public void RestartGame()
     {
+        if (GameObject.FindGameObjectWithTag("Player"))
+        {
+            Destroy(GameObject.FindGameObjectWithTag("Player"));
+        }
         Instantiate(player);
-        player.gameObject.transform.position = new Vector3(0, -5, -14.85f);
+        var resetPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        GameObject.FindGameObjectWithTag("Enemy").GetComponent<Enemy>().SearchPlayer();
+
+        //resetPlayer.playerHP = 100;
+        //resetPlayer.shooting = true;
+        //resetPlayer.playerShootDelay = 0.9f;
+        //resetPlayer.Damage(0);
+        resetPlayer.transform.position = new Vector3(player.transform.position.x, player.transform.position.y - 1, player.transform.position.z);
+
         Vector3 groundPos = ground.gameObject.transform.position;
         ground.gameObject.transform.position = new Vector3(groundPos.x, 200, groundPos.z);
         SearchAndDestroyEnemysAndBullets();
@@ -143,6 +164,8 @@ public class GameManager : MonoBehaviour
     {
         enemys = GameObject.FindGameObjectsWithTag("Enemy");
         bullets = GameObject.FindGameObjectsWithTag("EnemyBullet");
+        bonus = GameObject.FindGameObjectsWithTag("WeaponSpeed");
+
 
         for (int i = 0; i < enemys.Length; i++)
         {
@@ -151,6 +174,10 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < bullets.Length; i++)
         {
             bullets[i].gameObject.GetComponent<EnemyBulletBehavior>().DestroyBullet();
+        }        
+        foreach (GameObject b in bonus)
+        {
+            GameObject.Destroy(b);
         }
     }
 
@@ -176,10 +203,6 @@ public class GameManager : MonoBehaviour
     {
         gameManagerAudio.PlayOneShot(playerBulletSmash, 0.5f);
     }
-    //public void playerExplosionPlay()
-    //{
-    //    gameManagerAudio.PlayOneShot(playerExplosion, 0.5f);
-    //}
 
     public void enemyBulletSmashPlay()
     {
@@ -198,7 +221,14 @@ public class GameManager : MonoBehaviour
     // Side bar
     public void ScoreUp()
     {
-        score += 1;
-        scoreText.text = $"Score: {(score).ToString()}";
+        MainManager.Instance.score += 1;
+        scoreText.text = $"Score: {(MainManager.Instance.score).ToString()}";
+        if (MainManager.Instance.score >= MainManager.Instance.bestScore)
+        {
+            bestScoreText.text = scoreText.text;
+            MainManager.Instance.bestScore = MainManager.Instance.score;
+            MainManager.Instance.bestPlayer = MainManager.Instance.playerName;
+            MainManager.Instance.SaveName();
+        }
     }
 }

@@ -33,6 +33,7 @@ public class MoveBack : MonoBehaviour
             {
                 //gameManager.gameIsPlay = false;
                 gameManager.endOfLevel = true;
+                gameManager.GameOver();
             }
         }
     }

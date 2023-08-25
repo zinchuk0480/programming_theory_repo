@@ -34,7 +34,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3736518180904682733
 MeshFilter:
@@ -119,6 +119,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66f0bc8d8c56ec747a273d7ef345cf3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
+  player: {fileID: 624398690331366871, guid: bc1e89f8e3558d042a29bb55dce22432, type: 3}
   enemyHP: 100
   Renderer: {fileID: 7703649755672220618}
   startColor: {r: 0, g: 0, b: 0, a: 0}
@@ -127,7 +129,6 @@ MonoBehaviour:
   openFire: 0
   ceaseFire: 1
   explosionParticle: {fileID: 0}
-  audioExplosion: {fileID: 8300000, guid: b99da9a57308d4ba1bee1cf1d9038376, type: 3}
   weaponSpeedBonus: {fileID: 7793423671925872767, guid: 248415490d1504043a1eaf8f278c1956, type: 3}
   startPos: 0
 --- !u!82 &-5521078670307661212

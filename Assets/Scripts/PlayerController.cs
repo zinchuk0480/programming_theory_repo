@@ -5,13 +5,10 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     GameManager gameManager;
-    // World border
-    public float sideBorder;
-    public float verticalBorder;
 
     // Player
     public float playerSpeed = 7.7f;
-    public float playerHP = 100f;
+    public float playerHP;
     public bool untouchable = false;
     
     public GameObject explosionParticle;
@@ -24,15 +21,11 @@ public class PlayerController : MonoBehaviour
 
 
     // Shooting
-    [SerializeField] private bool shooting = true;
+    public bool shooting;
     public GameObject playerBullet;
 
     private float minimumShootDelay = 0.1f;
     private float stepShootDelay = 0.1f;
-
-    // Audio
-    private AudioSource playerAudio;
-    public AudioClip playerShoot;
 
 
     // incapsulation
@@ -56,18 +49,21 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // Audio
+    private AudioSource playerAudio;
+    public AudioClip playerShoot;
+
 
     // Start is called before the first frame update
     void Start()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        shooting = true;
+        playerHP = 100;
         StartCoroutine(StartShuting());
 
         Material material = Renderer.material;
         startColor = material.color;
-
-        verticalBorder = gameManager.verticalBorder;
-        sideBorder = gameManager.sideBorder;
 
         playerAudio = GetComponent<AudioSource>();
     }
@@ -84,19 +80,19 @@ public class PlayerController : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
-        if (Input.GetKey(KeyCode.A) && transform.position.x > -sideBorder)
+        if (Input.GetKey(KeyCode.A) && transform.position.x > -gameManager.sideBorder)
         {
             transform.Translate(Vector3.left * playerSpeed * Time.deltaTime);
         }         
-        if (Input.GetKey(KeyCode.D) && transform.position.x < sideBorder)
+        if (Input.GetKey(KeyCode.D) && transform.position.x < gameManager.sideBorder)
         {
             transform.Translate(Vector3.right * playerSpeed * Time.deltaTime);
         } 
-        if (Input.GetKey(KeyCode.W) && transform.position.y < verticalBorder)
+        if (Input.GetKey(KeyCode.W) && transform.position.y < gameManager.verticalBorder)
         {
             transform.Translate(Vector3.forward * playerSpeed * Time.deltaTime);
         }        
-        if (Input.GetKey(KeyCode.S) && transform.position.y > -verticalBorder)
+        if (Input.GetKey(KeyCode.S) && transform.position.y > -gameManager.verticalBorder)
         {
             transform.Translate(Vector3.back * playerSpeed * Time.deltaTime);
         }
@@ -140,10 +136,15 @@ public class PlayerController : MonoBehaviour
         material.color = playerDamageBlink;
         Invoke("ResetMaterial", 0.3f);
 
-        if (playerHP < 50)
+        if (playerHP <= 50)
         {
             damageSmoke.Play();
         }
+        else
+        {
+            damageSmoke.Stop();
+        }
+
         if (playerHP <= 0)
         {
             PlayerExplosion();
@@ -166,8 +167,12 @@ public class PlayerController : MonoBehaviour
 
     public void PlayerEscapeFromLevel()
     {
-        transform.Translate(Vector3.forward * playerSpeed * Time.deltaTime);
-        untouchable = true;
+        if (transform.position.y < gameManager.verticalBorder + 17)
+        {
+            shooting = false;
+            transform.Translate(Vector3.forward * playerSpeed * Time.deltaTime);
+            untouchable = true;
+        }
     }
 
     private void OnTriggerEnter(Collider other)

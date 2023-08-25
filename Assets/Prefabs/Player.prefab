@@ -154,10 +154,10 @@ MonoBehaviour:
   playerHP: 100
   untouchable: 1
   explosionParticle: {fileID: 8062662471586593187, guid: 24e7e644e92a0df46814e2a319f30be2, type: 3}
+  damageSmoke: {fileID: 337730542674794283}
   Renderer: {fileID: 9000292688260353446}
   startColor: {r: 1, g: 0, b: 0, a: 0}
   playerDamageBlink: {r: 1, g: 1, b: 1, a: 0.5}
-  damageSmoke: {fileID: 337730542674794283}
   shooting: 1
   playerBullet: {fileID: 8487894664895780250, guid: eaa06db03963eb64583febafbdc3b9a3, type: 3}
   playerShoot: {fileID: 8300000, guid: ffb159a21c8a04135a5616979c828fab, type: 3}

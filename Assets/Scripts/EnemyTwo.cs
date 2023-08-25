@@ -39,7 +39,7 @@ public class EnemyTwo : Enemy
         Move();
     }
 
-    // Polymorphism (override enemy class)
+    // POLYMORPHISM
     public override void Explosion()
     {
         if (enemyHP <= 0)
