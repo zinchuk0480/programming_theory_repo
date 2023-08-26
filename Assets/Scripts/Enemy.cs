@@ -55,11 +55,11 @@ public abstract class Enemy : MonoBehaviour
         while (openFire)
         {
             yield return new WaitForSeconds(enemyShootDelay);
-            BulletOut();
+            rocketOut();
         }
     }
 
-    public void BulletOut()
+    public virtual void rocketOut()
     {
         Instantiate(enemyBulet, transform.position, Quaternion.Euler(new Vector3(90, 0, 0)));
     }

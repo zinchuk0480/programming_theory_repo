@@ -22,10 +22,11 @@ public class GameManager : MonoBehaviour
 
     public GameObject[] enemyTypesArray;
 
-    // All Enemy and his bullet
+    // All Enemy and his rocket
     private GameObject[] enemys;
     private GameObject[] bullets;
     private GameObject[] bonus;
+    private GameObject[] rockets;
 
     // Level
     private Level1 level_1;
@@ -148,10 +149,6 @@ public class GameManager : MonoBehaviour
         var resetPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         GameObject.FindGameObjectWithTag("Enemy").GetComponent<Enemy>().SearchPlayer();
 
-        //resetPlayer.playerHP = 100;
-        //resetPlayer.shooting = true;
-        //resetPlayer.playerShootDelay = 0.9f;
-        //resetPlayer.Damage(0);
         resetPlayer.transform.position = new Vector3(player.transform.position.x, player.transform.position.y - 1, player.transform.position.z);
 
         Vector3 groundPos = ground.gameObject.transform.position;
@@ -165,6 +162,7 @@ public class GameManager : MonoBehaviour
         enemys = GameObject.FindGameObjectsWithTag("Enemy");
         bullets = GameObject.FindGameObjectsWithTag("EnemyBullet");
         bonus = GameObject.FindGameObjectsWithTag("WeaponSpeed");
+        rockets = GameObject.FindGameObjectsWithTag("WeaponSpeed");
 
 
         for (int i = 0; i < enemys.Length; i++)
@@ -174,7 +172,11 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < bullets.Length; i++)
         {
             bullets[i].gameObject.GetComponent<EnemyBulletBehavior>().DestroyBullet();
-        }        
+        }
+        foreach (GameObject rocket in rockets)
+        {
+            GameObject.Destroy(rocket);
+        }
         foreach (GameObject b in bonus)
         {
             GameObject.Destroy(b);
@@ -188,6 +190,11 @@ public class GameManager : MonoBehaviour
             if (i % 3 == 0)
             {
                 GameObject prefabInstantiate = Instantiate(enemyTypesArray[1], new Vector3(array[i, 0], array[i, 1], array[i, 2]), transform.rotation);
+                prefabInstantiate.transform.SetParent(enemys_folder.transform);
+            }
+            else if (i % 7 == 0 && i != 0)
+            {
+                GameObject prefabInstantiate = Instantiate(enemyTypesArray[2], new Vector3(array[i, 0], array[i, 1], array[i, 2]), transform.rotation);
                 prefabInstantiate.transform.SetParent(enemys_folder.transform);
             }
             else

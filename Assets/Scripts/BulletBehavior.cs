@@ -23,10 +23,10 @@ public class BulletBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        BulletMove();
+        bulletMove();
     }
 
-    void BulletMove()
+    void bulletMove()
     {
         transform.Translate(Vector3.up * playerBulletSpeed * Time.deltaTime);
         if (transform.position.y > endDisplay)
