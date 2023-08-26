@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
     private float stepShootDelay = 0.1f;
 
 
-    // incapsulation
+    // ENCAPSULATION
     private float m_playerShootDelay = 0.9f;
     public float playerShootDelay
     {
